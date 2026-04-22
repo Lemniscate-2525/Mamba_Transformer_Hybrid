@@ -170,13 +170,13 @@ We define a "state pair" $\psi_t = (\bar{A}_t, \bar{B}_t u_t)$ representing "dec
 
 The combining rule for two consecutive pairs is :
 
-$$(\bar{A}_j, b_j) \circ (\bar{A}_i, b_i) = (\bar{A}_j \cdot \bar{A}_i,\;\; \bar{A}_j \cdot b_i + b_j)$$
+$$(\bar{A}_j, b_j) \circ (\bar{A}_i, b_i) = (\bar{A}_j \cdot \bar{A}_i , \bar{A}_j \cdot b_i + b_j)$$
 
 If we verify; $x_i = \bar{A}_i x_{i-1} + b_i$ and $x_j = \bar{A}_j x_{j-1} + b_j$, then after two steps;
 
 $$x_j = \bar{A}_j(\bar{A}_i x_{i-1} + b_i) + b_j = (\bar{A}_j \bar{A}_i)\,x_{i-1} + (\bar{A}_j b_i + b_j)$$
 
-The combined pair $(\bar{A}_j \bar{A}_i,\; \bar{A}_j b_i + b_j)$ has exactly the same structure as a single-step pair. Hence associativity holds combining pairs of pairs always produces the same form.
+The combined pair $(\bar{A}_j \bar{A}_i , \bar{A}_j b_i + b_j)$ has exactly the same structure as a single-step pair. Hence associativity holds combining pairs of pairs always produces the same form.
 
 ### Tree Reduction : $O(\log N)$ Depth 
 
@@ -226,7 +226,7 @@ The entire length-$N$ sequence is processed in parallel. No sequential dependenc
 
 ## Disadvantages of Pure Mamba : 
 
-Mamba is excellent at long-range memory and GPU-efficient inference. But it has real limitations:
+Mamba is excellent at long-range memory and GPU-efficient inference. But it has Limitations :
 
 **No Bidirectional Context :** The recurrence is causal by design; $x_t$ depends only on $x_{t-1}$ and $u_t$. For tasks where future context matters (understanding a sentence where the subject comes after the verb), pure Mamba struggles. Transformers with bidirectional attention have equal access to all positions.
 
