@@ -350,7 +350,7 @@ The three plots below show training perplexity, latency scaling, and throughput 
   
 - The curve drops sharply from $10^4$ in the first 50 steps. This is the model learning BPE token frequency statistics, the easy part. The gradient is steep because even a crude unigram prior slashes perplexity dramatically.
   
-- By step 100 the descent slows and plateaus around 10^3. This is where syntactic and semantic structure must be learned, and 200 steps on WikiText-2 is nowhere near enough. The plateau is a training budget limit, not an architectural ceiling.
+- By step 100 the descent slows and plateaus around $10^3$. This is where syntactic and semantic structure must be learned, and 200 steps on WikiText-2 is nowhere near enough. The plateau is a training budget limit, not an architectural ceiling.
 
 **Latency Scaling :** Latency measures wall-clock time for a single forward pass; plotted on a log-log scale so that power-law scaling appears as a straight line.
 
