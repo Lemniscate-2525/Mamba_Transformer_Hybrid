@@ -153,7 +153,15 @@ This is selective gating: the model learns when to remember, when to forget, and
 
 ## The Recurrence Problem(From $O(N)$ Sequential to $O(\log N)$ Parallel) : 
 
-The discrete recurrence $x_t = \bar{A}_t x_{t-1} + \bar{B}_t u_t$ is computed as a for-loop over $t = 1, \ldots, N$. Each step depends on the previous. This is $O(N)$ sequential operations; no two steps can be computed in parallel. Modern **GPUs thrive on parallelism**; a sequential loop wastes nearly all available compute.
+The discrete recurrence;
+
+$$
+x_t = \bar{A}_t x_{t-1} + \bar{B}_t u_t
+$$
+
+is computed as a for-loop over $t = 1, \dots, N$. 
+
+Each step depends on the previous. This is $O(N)$ sequential operations; no two steps can be computed in parallel. Modern **GPUs thrive on parallelism**; a sequential loop wastes nearly all available compute.
 
 ### The Parallel Scan (Prefix Scan) : 
 
@@ -163,7 +171,13 @@ The combining rule for two consecutive pairs is :
 
 $$(\bar{A}_j, b_j) \circ (\bar{A}_i, b_i) = (\bar{A}_j \cdot \bar{A}_i , \bar{A}_j \cdot b_i + b_j)$$
 
-Verifying: $x_i = \bar{A}_i x_{i-1} + b_i$ and $x_j = \bar{A}_j x_{j-1} + b_j$, then after two steps :
+Verifying :
+
+$$
+x_i = \bar{A}_i x_{i-1} + b_i$ and $x_j = \bar{A}_j x_{j-1} + b_j
+$$
+
+After two steps;
 
 $$x_j = \bar{A}_j(\bar{A}_i x_{i-1} + b_i) + b_j = (\bar{A}_j \bar{A}_i)\,x_{i-1} + (\bar{A}_j b_i + b_j)$$
 
@@ -183,26 +197,30 @@ Total depth: $\log_2 8 = 3$ levels. Compared to the sequential loop: 7 steps, al
 
 In practice this is computed via cumulative product and cumulative sum;
 
-**Step 1: Cumulative product of decay factors :**
+**Step 1 -> Cumulative product of decay factors :**
 
 $$P_t = \prod_{s=1}^{t} \bar{A}_s$$
 
 This gives the total accumulated decay from position 1 through position $t$.
 
-**Step 2: Weighted inputs :**
+**Step 2 -> Weighted inputs :**
 
-Each input contribution $b_t = \bar{B}_t u_t$ needs to be "forwarded" to the current timestep. The contribution of $b_s$ at time $t > s$ is $b_s \cdot \prod_{r=s+1}^t \bar{A}_r = b_s \cdot P_t / P_s$.
+Each input contribution $b_t = \bar{B}_t u_t$ needs to be "forwarded" to the current timestep. The contribution of $b_s$ at time $t > s$ is : 
+
+$$
+b_s \cdot \prod_{r=s+1}^{t} \bar{A}_r = b_s \cdot \frac{P_t}{P_s}
+$$
 
 So the normalized contribution is $b_s / P_s$.
 Adding; 
 
 $$S_t = \sum_{s=1}^{t} \frac{b_s}{P_s}$$
 
-**Step 3: Recover state :**
+**Step 3 -> Recover state :**
 
 $$x_t = P_t \cdot S_t$$
 
-Both $P_t$ (cumulative product) and $S_t$ (cumulative sum) can be computed with no for-loop using `torch.cumprod` and `torch.cumsum`, which are fully parallel GPU primitives. The entire length $N$ sequence is processed in parallel. No sequential dependency. Full GPU utilization.
+Both $P_t$ (cumulative product) and $S_t$ (cumulative sum) can be computed with no for-loop using `torch.cumprod` and `torch.cumsum`, which are fully parallel GPU primitives. The entire length $N$ sequence is processed in parallel. No sequential dependency, full GPU utilization.
 
 ### Sequential vs Parallel : 
 
