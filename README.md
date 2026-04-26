@@ -197,6 +197,7 @@ Total depth: $\log_2 8 = 3$ levels. Compared to the sequential loop: 7 steps, al
 
 In practice this is computed via cumulative product and cumulative sum;
 
+
 **Step 1 -> Cumulative product of decay factors :**
 
 $$P_t = \prod_{s=1}^{t} \bar{A}_s$$
@@ -236,7 +237,7 @@ Both $P_t$ (cumulative product) and $S_t$ (cumulative sum) can be computed with 
 
 Mamba is excellent at **long-range memory and GPU-efficient inference**.
 
-But ther are limitations :
+But there are limitations :
 
 **No Bidirectional Context :** The recurrence is causal by design; $x_t$ depends only on $x_{t-1}$ and $u_t$. For tasks where future context matters (understanding a sentence where the subject comes after the verb), pure Mamba struggles. Transformers with bidirectional attention have equal access to all positions.
 
