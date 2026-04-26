@@ -13,7 +13,7 @@ from datasets import load_dataset
 from tokenizers import Tokenizer, models, trainers, pre_tokenizers
 
 from model import HybridModel
-from transformer import TransformerModel
+from transformer_baseline import TransformerModel
 
 device = "cuda" if torch.cuda.is_available() else "cpu"
 
