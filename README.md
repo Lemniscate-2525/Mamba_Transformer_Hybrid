@@ -1,4 +1,4 @@
-# HYBRID MAMBA-TRANSFORMER: Structured State Space Meets Attention
+# HYBRID Mamba-Transfomer -> Structured State Space Meets Attention : 
 
 ---
 
