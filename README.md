@@ -347,25 +347,25 @@ The three plots below show training perplexity, latency scaling, and throughput 
 **Perplexity :** Perplexity measures how confidently a language model predicts the next token; lower is better, and it is the exponential of cross-entropy loss. It is the standard quality metric for language modelling.
 
 - Only one curve is prominently visible because both models' traces sit almost on top of each other, which is itself informative: the Mamba scan component does not hurt language modelling quality at this scale.
-- 
+  
 - The curve drops sharply from ~$10^4$ in the first 50 steps. This is the model learning BPE token frequency statistics, the easy part. The gradient is steep because even a crude unigram prior slashes perplexity dramatically.
-- 
-- By step 100 the descent slows and plateaus around $10^3$. This is where syntactic and semantic structure must be learned, and 200 steps on WikiText-2 is nowhere near enough. The plateau is a training budget limit, not an architectural ceiling.
+  
+- By step 100 the descent slows and plateaus around 10^3. This is where syntactic and semantic structure must be learned, and 200 steps on WikiText-2 is nowhere near enough. The plateau is a training budget limit, not an architectural ceiling.
 
 Latency Scaling : Latency measures wall-clock time for a single forward pass; plotted on a log-log scale so that power-law scaling appears as a straight line.
 
 - The Transformer (blue) shows a sharp anomalous dip around sequence length 64–128. This is a GPU warmup artifact: CUDA kernel launch overhead dominates at very small batch-sequence products, so the first measurement is noisy and unreliable.
-- 
+  
 - Above 256 tokens, both curves grow steeply and roughly in parallel. The Hybrid is consistently above the Transformer because it runs attention and the Mamba scan together; the scan adds to the forward pass rather than replacing attention.
-- 
+  
 - The crossover where Mamba's $O(N \log N)$ scaling wins over attention's $O(N^2)$ would only appear at sequence lengths well beyond 2048. At this model size ($d = 128$, single-layer attention) the quadratic regime has not yet made attention catastrophically expensive.
 
 **Throughput : ** Throughput measures tokens processed per second; higher is better, and it captures how efficiently the model uses GPU parallelism across the batch.
 
 - The Transformer (blue) peaks around 256–512 tokens then declines. This is the point where **the $N^2$ attention matrix starts saturating memory bandwidth**; the GPU spends more time moving data than computing.
-- 
+  
 - The Hybrid (orange) shows a flatter, lower curve throughout. It does strictly more work per forward pass (attention + scan + FFN vs. attention + FFN), so it processes fewer tokens per second at every sequence length tested.
-- 
+  
 - The Hybrid does not show a throughput advantage here because the benchmark does not reach the regime where Mamba's linear memory cost would dominate. At $N > 8{,}000$ with fixed memory, the Transformer begins to OOM while the Mamba state stays constant; that is where the curves would invert.
 
 ### Benchmark Metrics : 
