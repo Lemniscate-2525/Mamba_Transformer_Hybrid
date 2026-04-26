@@ -348,11 +348,11 @@ The three plots below show training perplexity, latency scaling, and throughput 
 
 - Only one curve is prominently visible because both models' traces sit almost on top of each other, which is itself informative: the Mamba scan component does not hurt language modelling quality at this scale.
   
-- The curve drops sharply from ~$10^4$ in the first 50 steps. This is the model learning BPE token frequency statistics, the easy part. The gradient is steep because even a crude unigram prior slashes perplexity dramatically.
+- The curve drops sharply from $10^4$ in the first 50 steps. This is the model learning BPE token frequency statistics, the easy part. The gradient is steep because even a crude unigram prior slashes perplexity dramatically.
   
 - By step 100 the descent slows and plateaus around 10^3. This is where syntactic and semantic structure must be learned, and 200 steps on WikiText-2 is nowhere near enough. The plateau is a training budget limit, not an architectural ceiling.
 
-Latency Scaling : Latency measures wall-clock time for a single forward pass; plotted on a log-log scale so that power-law scaling appears as a straight line.
+**Latency Scaling :** Latency measures wall-clock time for a single forward pass; plotted on a log-log scale so that power-law scaling appears as a straight line.
 
 - The Transformer (blue) shows a sharp anomalous dip around sequence length 64–128. This is a GPU warmup artifact: CUDA kernel launch overhead dominates at very small batch-sequence products, so the first measurement is noisy and unreliable.
   
@@ -360,7 +360,7 @@ Latency Scaling : Latency measures wall-clock time for a single forward pass; pl
   
 - The crossover where Mamba's $O(N \log N)$ scaling wins over attention's $O(N^2)$ would only appear at sequence lengths well beyond 2048. At this model size ($d = 128$, single-layer attention) the quadratic regime has not yet made attention catastrophically expensive.
 
-**Throughput : ** Throughput measures tokens processed per second; higher is better, and it captures how efficiently the model uses GPU parallelism across the batch.
+**Throughput :** Throughput measures tokens processed per second; higher is better, and it captures how efficiently the model uses GPU parallelism across the batch.
 
 - The Transformer (blue) peaks around 256–512 tokens then declines. This is the point where **the $N^2$ attention matrix starts saturating memory bandwidth**; the GPU spends more time moving data than computing.
   
