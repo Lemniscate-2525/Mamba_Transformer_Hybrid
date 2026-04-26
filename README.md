@@ -202,7 +202,7 @@ $$S_t = \sum_{s=1}^{t} \frac{b_s}{P_s}$$
 
 $$x_t = P_t \cdot S_t$$
 
-Both $P_t$ (cumulative product) and $S_t$ (cumulative sum) can be computed with no for-loop using `torch.cumprod` and `torch.cumsum`, which are fully parallel GPU primitives. The entire length-$N$ sequence is processed in parallel. No sequential dependency. Full GPU utilization.
+Both $P_t$ (cumulative product) and $S_t$ (cumulative sum) can be computed with no for-loop using `torch.cumprod` and `torch.cumsum`, which are fully parallel GPU primitives. The entire length $N$ sequence is processed in parallel. No sequential dependency. Full GPU utilization.
 
 ### Sequential vs Parallel : 
 
