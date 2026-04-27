@@ -1,4 +1,4 @@
-# HYBRID Mamba-Transfomer -> Structured State Space Meets Attention : 
+# Hybrid Mamba-Transfomer -> Structured State Space Meets Attention : 
 
 ---
 
@@ -373,7 +373,7 @@ The three plots below show training perplexity, latency scaling, and throughput 
 
 **Latency Scaling :** Latency measures wall-clock time for a single forward pass; plotted on a log-log scale so that power-law scaling appears as a straight line.
 
-- The Transformer (blue) shows a sharp anomalous dip around sequence length 64–128. This is a GPU warmup artifact: CUDA kernel launch overhead dominates at very small batch-sequence products, so the first measurement is noisy and unreliable.
+- The Transformer shows a sharp anomalous dip around sequence length 64–128. This is a GPU warmup artifact, the CUDA kernel launch overhead dominates at very small batch-sequence products, so the first measurement is noisy and unreliable.
   
 - Above 256 tokens, both curves grow steeply and roughly in parallel. The Hybrid is consistently above the Transformer because it runs attention and the Mamba scan together; the scan adds to the forward pass rather than replacing attention.
   
@@ -415,7 +415,7 @@ Raw per-model, per-sequence-length measurements from the benchmark run. Latency 
 
 ---
 
-## Conclusion : 
+## Conclusions : 
 
 - The benchmark confirms theoretical predictions at small scale that the Hybrid adds latency and VRAM overhead at moderate sequence lengths because it runs both attention and the SSM, not one instead of the other.
 - Perplexity trajectories for both models are nearly identical. The Mamba component does not hurt language modelling quality; it just has not yet had the chance to help it at this sequence length and training budget.
